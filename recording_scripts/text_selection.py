@@ -27,7 +27,7 @@ def scoreSelection(transcripted_sentences):
     for transcription in transcripted_sentences:
         scores.append((len(set(transcription[1])), transcription))
     scores = sorted(scores, key=lambda x: x[0])
-    print scores
+    print(scores)
     return scores
 
 def countCoverage(transcripted_sentences):
@@ -39,7 +39,7 @@ broadSelection('ultima_niebla.txt')
 scoresSentences = scoreSelection(selectedSentences)
 countCoverage(scoresSentences)
 for p in phoneDict:
-    print p, phoneDict[p]
+    print(p, phoneDict[p])
 N = 20
 for sentence in scoresSentences[N:]:
     outf.writelines(sentence[1][0].strip()+'\n')
