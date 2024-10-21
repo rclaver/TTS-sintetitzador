@@ -8,16 +8,22 @@ import codecs
 import random
 import os
 
+C_NONE="\033[0m"
+CB_GRN="\033[1;32m"
+CB_YLW="\033[1;33m"
+CB_WHT="\033[1;37m"
+
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
-CHANNELS = 1 # channels, must be one for forced alignment toolkit to work
-RATE = 16000 # sample rate
-RECORD_SECONDS = 3 # seconds to allow recording per sample
+CHANNELS = 1       # channels, must be one for forced alignment toolkit to work
+RATE = 16000       # sample rate
+RECORD_SECONDS = 5 # nombre de segons de temps per poder dir la frase
 
 # recording function
 def record(text, file_name):
-   print("\n** Grabando **")
-   print("\nLee en voz alta:   \'{}\'   ".format(text))
+   #os.system('clear')
+   print(f"\n{CB_GRN}** Gravant **{C_NONE}")
+   print(f"{CB_WHT}Llegeix en veu alta:{CB_YLW}", end=" "); print("\'{}\' ".format(text)); print(C_NONE, end="")
 
    p = pyaudio.PyAudio()
    stream = p.open(format=FORMAT,channels=CHANNELS,rate=RATE,input=True,frames_per_buffer=CHUNK)
@@ -42,7 +48,7 @@ def record(text, file_name):
 def main(subject_n, sentence_txt):
    sentence_set = codecs.open(sentence_txt, 'r', ).read().split('\n')
    random.shuffle(sentence_set)
-   input("Si estas listo, pulsa una tecla: ")
+   input(CB_WHT+"Si estàs preparat, prem la tecla 'Retorn'"+C_NONE)
    os.system('clear')
    for n in range(0, len(sentence_set)):
       if sentence_set[n]:
@@ -51,7 +57,7 @@ def main(subject_n, sentence_txt):
          outxt.write(sentence_set[n])
          outxt.close()
 
-   print( '\n** Fin de la grabación **')
+   print(f'\n{CB_GRN}** Fi de la gravació **{C_NONE}\n')
 
 # inici
-main('muestra', 'sentences2read.txt')
+main('mostra', 'textos/sentences2read.txt')

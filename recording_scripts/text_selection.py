@@ -34,8 +34,8 @@ def countCoverage(transcripted_sentences):
     for transcription in transcripted_sentences:
         for phone in transcription[1][1]: phoneDict[phone] += 1
 
-outf = codecs.open('sentences2read.txt', 'w', encoding='utf-8')
-broadSelection('ultima_niebla.txt')
+outf = codecs.open('textos/sentences2read.txt', 'w', encoding='utf-8')
+broadSelection('textos/una_idea.txt')
 scoresSentences = scoreSelection(selectedSentences)
 countCoverage(scoresSentences)
 for p in phoneDict:
