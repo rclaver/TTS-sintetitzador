@@ -14,6 +14,8 @@ for arxiu in $(ls -v data/*.lab); do
    for w in ${words[@]}; do
       #per a cada paraula crea un arxiu fonètic
       echo $((++n)) $w
-      echo $w | espeak-ng -vca -b1 -xq --phonout="$arxiu.$n.pho"
+      transcripcio=$(echo $w | espeak-ng -vca -b1 -xq)
+      #afegeix la paraula i la seva transcripció al diccionari català
+      echo -e "$w\t$transcripcio" >> ca.dict
    done
 done
