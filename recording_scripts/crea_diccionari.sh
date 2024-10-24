@@ -26,6 +26,7 @@ for arxiu in $(ls -v data/*.lab); do
       car=""
       for (( i=0 ; i < ${#transcripcio} ; i++ )) {
           car+="${transcripcio:i:1} "
+          echo -e "${transcripcio:i:1}" >> ca.yaml.dict
       }
       car="${car:0:${#car}-1}"   #elimina l'últim espai blanc
 

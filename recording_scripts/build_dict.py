@@ -7,7 +7,7 @@ from spanish_transcriber import transcribe
 import glob
 import codecs
 
-outdict = codecs.open('es.dict', 'w', encoding='utf-8')
+outdict = codecs.open('ca2.dict', 'w', encoding='utf-8')
 
 transDict = {}
 
