@@ -19,6 +19,8 @@ CHANNELS = 1       # channels, must be one for forced alignment toolkit to work
 RATE = 16000       # sample rate
 RECORD_SECONDS = 5 # nombre de segons de temps per poder dir la frase
 
+text_de_lectura = 'textos/frases.txt'
+
 # recording function
 def record(text, file_name):
    #os.system('clear')
@@ -45,19 +47,20 @@ def record(text, file_name):
    wf.close()
    os.system('clear')
 
-def main(subject_n, sentence_txt):
+def main(nom, sentence_txt):
    sentence_set = codecs.open(sentence_txt, 'r', ).read().split('\n')
    random.shuffle(sentence_set)
-   input(CB_WHT+"Si estàs preparat, prem la tecla 'Retorn'"+C_NONE)
+   print(f"{CB_WHT}Si estàs preparat, prem la tecla 'Retorn'{C_NONE}")
+   input()
    os.system('clear')
    for n in range(0, len(sentence_set)):
       if sentence_set[n]:
-         record(str(n)+':'+'\t'+sentence_set[n], 'data/'+str(n)+'_'+subject_n+'.wav' )
-         outxt = open('data/'+str(n)+'_'+subject_n+'.lab', 'w')
+         record(str(n)+':'+'\t'+sentence_set[n], 'data/'+str(n)+'_'+nom+'.wav' )
+         outxt = open('data/'+str(n)+'_'+nom+'.lab', 'w')
          outxt.write(sentence_set[n])
          outxt.close()
 
    print(f'\n{CB_GRN}** Fi de la gravació **{C_NONE}\n')
 
 # inici
-main('mostra', 'textos/sentences2read.txt')
+main('mostra', text_de_lectura)
