@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-''' Script to record audio samples read from text to train/test STT apps'''
-
+'''
+Gravació d'audios breus a partir de frases curtes
+'''
 import pyaudio
 import wave
 import codecs
@@ -16,7 +17,7 @@ CB_WHT="\033[1;37m"
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 1       # channels, must be one for forced alignment toolkit to work
-RATE = 16000       # sample rate
+RATE = 16000       # freqüència de mostreig (sample rate)
 RECORD_SECONDS = 5 # nombre de segons de temps per poder dir la frase
 
 text_de_lectura = 'textos/frases.txt'
