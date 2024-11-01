@@ -9,6 +9,7 @@ https://medium.com/@pilarsoledad/construyendo-un-sintetizador-de-texto-a-voz-usa
 
 L'article només està en castellà, però bàsicament mostra com utilitzar aquests scripts per crear una veu
 per selecció per unitats en espanyol.
+Es pot obtenir aamb: git clone https://github.com/pilarOG/unit_selection_tts.git
 
 Prerequisits:
    sudo apt install gcc-multilib libc-dev

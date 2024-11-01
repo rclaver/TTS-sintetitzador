@@ -1,10 +1,13 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import sys
-sys.path.append('../')
-from spanish_transcriber import transcribe
 import codecs
 import re
+import sys; sys.path.append('../')
+from catala_transcriber import transcribe
+
+arxiu_frases = 'textos/sentences2read.txt'
+text_original = 'textos/sentences2read_orig.txt'
 
 phoneDict = {}
 selectedSentences = []
@@ -12,8 +15,10 @@ selectedSentences = []
 def broadSelection(corpora):
     sentences = codecs.open(corpora, 'r', encoding='utf-8').read().replace('\n', '.').split('.')
     for sentence in sentences:
-        sentence = sentence.replace(u'—', '').replace('_', '').replace('*', '').replace('"', '').replace(',', '').replace(u'¿', '').replace('  ', ' ')
-        sentence = sentence.replace(u'!', '').replace(u'¡', '').replace(':', '').replace(';', '').replace('\f', '').replace(u'?', '')
+        sentence = re.sub("([^a-z' \.àèéíòóúç0-9])", " ", sentence.lower())
+        sentence = re.sub(' +', ' ', sentence).strip()
+        # sentence = sentence.replace(u'—', '').replace('_', '').replace('*', '').replace('"', '').replace(',', '').replace(u'¿', '').replace('  ', ' ')
+        # sentence = sentence.replace(u'!', '').replace(u'¡', '').replace(':', '').replace(';', '').replace('\f', '').replace(u'?', '')
         if not re.findall(r'[0-9]', sentence) and len(sentence) < 100:
             transcription = transcribe(sentence)
             for phone in transcription:
@@ -32,15 +37,19 @@ def scoreSelection(transcripted_sentences):
 
 def countCoverage(transcripted_sentences):
     for transcription in transcripted_sentences:
-        for phone in transcription[1][1]: phoneDict[phone] += 1
+        for phone in transcription[1][1]:
+           phoneDict[phone] += 1
 
-outf = codecs.open('textos/sentences2read.txt', 'w', encoding='utf-8')
-broadSelection('textos/una_idea.txt')
-scoresSentences = scoreSelection(selectedSentences)
-countCoverage(scoresSentences)
-for p in phoneDict:
-    print(p, phoneDict[p])
-N = 20
-for sentence in scoresSentences[N:]:
-    outf.writelines(sentence[1][0].strip()+'\n')
-outf.close()
+
+
+if __name__ == "__main__":
+   outf = codecs.open(arxiu_frases, 'w', encoding='utf-8')
+   broadSelection(text_original)
+   scoresSentences = scoreSelection(selectedSentences)
+   countCoverage(scoresSentences)
+   for p in phoneDict:
+       print(p, phoneDict[p])
+   N = 20
+   for sentence in scoresSentences[N:]:
+       outf.writelines(sentence[1][0].strip()+'\n')
+   outf.close()

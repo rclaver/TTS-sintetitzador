@@ -6,9 +6,9 @@ def ltsRules(text):
     '''
     Description:
         This function runs a series of replacement rules to convert from letters to sounds
-        given the phonetics of Chilean Spanish.
+        given the phonetics of Catalan.
     Input:
-        text(str): any string in Spanish
+        text(str): any string in Catalan
     Output:
         a list of phones for the input text
     '''
@@ -17,15 +17,15 @@ def ltsRules(text):
     # letter sets
     letsets = {'LNS': ('l','n','s'),
                'DNSR': ('d','n','s','r'),
-               'EI': ('e','i',u'é',u'í'),
-               'AEIOUt': (u'á',u'é',u'í',u'ó',u'ú'),
+               'EIO': ('e','i','o',u'é',u'í',u'ó'),
+               'AEIOUt': (u'à',u'é',u'è',u'í',u'ó',u'ò',u'ú'),
                'V': ('a','e','i','o','u'),
-               'C': ('b','c','d','f','g','h','j','k','l','m','n',u'ñ','p','q','r','s','t','v','w','x','y','z'),
-               'noQ': ('b','c','d','f','g','h','j','k','l','m','n','ñ','p','r','s','t','v','w','x','y','z'),
-                'AV': ('a','e','i','o','u',u'á',u'é',u'í',u'ó',u'ú'),
-                'SN': ('p','t','k','n','m',u'ñ'),
-                'LN': ('l','n'),
-                'LR': ('l','r') }
+               'C': ('b','c',u'ç','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z'),
+               'noQ': ('b','c','ç','d','f','g','h','j','k','l','m','n','p','r','s','t','v','w','x','y','z'),
+               'AV': ('a','e','i','o','u',u'à',u'é',u'è',u'í',u'ó',u'ò',u'ú'),
+               'SN': ('p','t','k','n','m'),
+               'LN': ('l','n'),
+               'LR': ('l','r') }
 
     letters = list(text)
     for let in range(0, len(letters)):
@@ -36,10 +36,10 @@ def ltsRules(text):
             pp_let = letters[let-2] # Previous previous letter
             n_let = letters[let+1]  # Next letter
             nn_let = letters[let+2] # Next next letter
-                                    # This is inspired by Festival
 
             # replace Q
-            if c_let == 'q' and n_let == 'u' and n_let == 'a': phones.append('k')
+            if   c_let == 'q' and n_let == 'u' and nn_let == 'a': phones.append('k')
+            elif c_let == 'q' and n_let == 'u' and nn_let == 'o': phones.append('k')
             elif c_let == 'q' and n_let == 'u': phones.append('k')
             elif c_let == 'u' and p_let == 'q': pass
             elif c_let == 'q': phones.append('k')
@@ -51,12 +51,13 @@ def ltsRules(text):
             elif c_let == 'u' and p_let == 'g' and n_let == u'é': pass
 
             # stress for written stress marks
-            elif c_let == u'á': phones.append('aS')
+            elif c_let == u'à': phones.append('aS')
             elif c_let == u'é': phones.append('eS')
             elif c_let == u'í': phones.append('iS')
             elif c_let == u'ó': phones.append('oS')
             elif c_let == u'ú': phones.append('uS')
 
+            elif c_let == u'ï': phones.append('i')
             elif c_let == u'ü': phones.append('u')
 
             # semivowels
@@ -74,9 +75,9 @@ def ltsRules(text):
             # fricatives
             elif c_let == 's' and p_let in letsets['AV'] and n_let in letsets['C']: phones.append('h')
             elif c_let == 's' and p_let in letsets['AV'] and n_let == '#': phones.append('h')
-            elif c_let == 'c' and p_let == 's' and n_let in letsets['EI']: pass
-            elif c_let == 'c' and n_let in letsets['EI']: phones.append('s')
-            elif c_let == 'g' and n_let in letsets['EI']: phones.append('x')
+            elif c_let == 'c' and p_let == 's' and n_let in letsets['EIO']: pass
+            elif c_let == 'c' and n_let in letsets['EIO']: phones.append('s')
+            elif c_let == 'g' and n_let in letsets['EIO']: phones.append('x')
             elif c_let == 'g': phones.append('g')
             elif c_let == 'j': phones.append('x')
 
@@ -155,7 +156,7 @@ def syllabify(phones):
     sylsets = {'V': ('aS','iS','uS','eS','oS','a','i','u','e','o','iSC','uSC','iSV','uSV'),
                'VV': ('aS','iS','uS','eS','oS','a','i','u','e','o'),
                'IUT': ('iS','uS'),
-               'C': ('b','c','d','f','g','h','j','k','ch','l','m','n','ny','p','q','r','s','t','v','w','x','y','z','bA','dA','gA','llA','rA'),
+               'C': ('b','c','ss','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z','bA','dA','gA','llA','rA'),
                'CC': ('bl','br','kl','kr','ks','dr','fl','fr','gl','gr','pl','pr','tl','tr'),
                'H': ('ia','ie','io','ua','ue','uo','ai','ei','oi','au','eu','ou','iu','ui','iaS','ieS','ioS','uaS','ueS','uoS','aSi','eSi','oSi','aSu','eSu','oSu','iuS','uiS') }
 
@@ -202,7 +203,6 @@ def stress(syllables):
                'V': ('a','e','i','o','u'),
                'C': ('b','c','d','f','g','h','j','k','l','m','n','ny','p','q','r','s','t','v','w','x','y','z','bA','dA','gA','llA','rA'),
                'VNS': ('n','s','a','i','u','e','o')}
-
     strVow = {'a': 'aS',
               'e': 'eS',
               'i': 'iS',

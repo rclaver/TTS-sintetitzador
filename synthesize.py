@@ -3,7 +3,7 @@
 
 import re
 from pydub import AudioSegment
-import spanish_transcriber
+import catala_transcriber
 import pickle
 import set_diphone_library
 import sys
