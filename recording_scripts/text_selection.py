@@ -6,8 +6,9 @@ import re
 import sys; sys.path.append('../')
 from catala_transcriber import transcribe
 
-arxiu_frases = 'textos/sentences2read.txt'
-text_original = 'textos/sentences2read_orig.txt'
+text_original = 'textos/selva_frases.txt'
+arxiu_scores = 'textos/selva_score.txt'
+arxiu_frases = 'textos/selva_trans.txt'
 
 phoneDict = {}
 selectedSentences = []
@@ -15,6 +16,7 @@ selectedSentences = []
 def broadSelection(corpora):
     sentences = codecs.open(corpora, 'r', encoding='utf-8').read().replace('\n', '.').split('.')
     for sentence in sentences:
+        sentence = sentence.replace('-', '')
         sentence = re.sub("([^a-z' \.àèéíòóúç0-9])", " ", sentence.lower())
         sentence = re.sub(' +', ' ', sentence).strip()
         # sentence = sentence.replace(u'—', '').replace('_', '').replace('*', '').replace('"', '').replace(',', '').replace(u'¿', '').replace('  ', ' ')
@@ -28,28 +30,35 @@ def broadSelection(corpora):
                     break
 
 def scoreSelection(transcripted_sentences):
+    f = open(arxiu_scores, "w")
     scores = []
     for transcription in transcripted_sentences:
-        scores.append((len(set(transcription[1])), transcription))
+       sc = (len(set(transcription[1])), transcription)
+       f.write(f"{sc[0]}"); f.write(sc[1]); f.write(f"\n")
+       scores.append(sc)
+       #scores.append((len(set(transcription[1])), transcription))
+    f.close()
     scores = sorted(scores, key=lambda x: x[0])
-    print(scores)
+    print("SCORES:", scores)
     return scores
 
 def countCoverage(transcripted_sentences):
     for transcription in transcripted_sentences:
         for phone in transcription[1][1]:
+           if phone not in phoneDict: phoneDict[phone] = 0
            phoneDict[phone] += 1
 
 
 
 if __name__ == "__main__":
-   outf = codecs.open(arxiu_frases, 'w', encoding='utf-8')
    broadSelection(text_original)
    scoresSentences = scoreSelection(selectedSentences)
    countCoverage(scoresSentences)
    for p in phoneDict:
        print(p, phoneDict[p])
+
    N = 20
+   outf = codecs.open(arxiu_frases, 'w', encoding='utf-8')
    for sentence in scoresSentences[N:]:
        outf.writelines(sentence[1][0].strip()+'\n')
    outf.close()

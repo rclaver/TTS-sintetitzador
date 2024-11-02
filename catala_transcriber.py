@@ -57,6 +57,9 @@ def ltsRules(text):
             elif c_let == u'ó': phones.append('oS')
             elif c_let == u'ú': phones.append('uS')
 
+            elif c_let == u'è': phones.append(u'eSV')
+            elif c_let == u'ò': phones.append(u'oSV')
+
             elif c_let == u'ï': phones.append('i')
             elif c_let == u'ü': phones.append('u')
 
@@ -77,6 +80,7 @@ def ltsRules(text):
             elif c_let == 's' and p_let in letsets['AV'] and n_let == '#': phones.append('h')
             elif c_let == 'c' and p_let == 's' and n_let in letsets['EIO']: pass
             elif c_let == 'c' and n_let in letsets['EIO']: phones.append('s')
+            elif c_let == 'ç' and n_let in letsets['EIO']: phones.append('s')
             elif c_let == 'g' and n_let in letsets['EIO']: phones.append('x')
             elif c_let == 'g': phones.append('g')
             elif c_let == 'j': phones.append('x')
@@ -87,7 +91,7 @@ def ltsRules(text):
             elif c_let == 'z': phones.append('s')
 
             # affricates
-            elif c_let == 'c' and n_let == 'h': phones.append('ch')
+            elif c_let == 'c' and n_let == 'h': phones.append('x')
             elif c_let == 'h' and p_let == 'c': pass
             elif c_let == 'l' and n_let == 'l': phones.append('ll')
             elif c_let == 'l' and p_let == 'l': pass
@@ -199,9 +203,9 @@ def stress(syllables):
     '''
     stressed = []
     syllables = ['#','#']+syllables+['#','#']
-    strsets = {'notNSV': ('p','t','k','b','d','g','bA','dA','gA','f','hz','x','ch','ll','m','ny','l','llA','rA','r','rr'),
+    strsets = {'notNSV': ('p','t','k','b','d','g','bA','dA','gA','f','hz','x','ll','m','l','llA','rA','r','rr'),
                'V': ('a','e','i','o','u'),
-               'C': ('b','c','d','f','g','h','j','k','l','m','n','ny','p','q','r','s','t','v','w','x','y','z','bA','dA','gA','llA','rA'),
+               'C': ('b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z','bA','cA','dA','gA','llA','rA'),
                'VNS': ('n','s','a','i','u','e','o')}
     strVow = {'a': 'aS',
               'e': 'eS',
@@ -300,7 +304,7 @@ def transcribe(text):
     syllables = syllabify(phones)
     # Step 5: stress assignment
     # The stress assignment is only run if the word doesn't have the stress mark written
-    if not re.findall(u'[áéúíó]',text):
+    if not re.findall(u'[àéèíóòú]',text):
         stressed = stress(syllables)
         return stressed
     # In this case, syllable marks are only used to assign stress and then removed
