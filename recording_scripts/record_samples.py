@@ -18,9 +18,12 @@ CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 1       # channels, must be one for forced alignment toolkit to work
 RATE = 16000       # freqüència de mostreig (sample rate)
-RECORD_SECONDS = 5 # nombre de segons de temps per poder dir la frase
+RECORD_SECONDS = 3 # nombre de segons de temps per poder dir la frase
 
 text_de_lectura = 'textos/frases.txt'
+
+def underlining_name(name):
+   return name.replace(" ", "_").replace("''", "_")
 
 # recording function
 def record(text, file_name):
@@ -48,7 +51,7 @@ def record(text, file_name):
    wf.close()
    os.system('clear')
 
-def main(nom, sentence_txt):
+def main(sentence_txt):
    sentence_set = codecs.open(sentence_txt, 'r', ).read().split('\n')
    random.shuffle(sentence_set)
    print(f"{CB_WHT}Si estàs preparat, prem la tecla 'Retorn'{C_NONE}")
@@ -56,12 +59,13 @@ def main(nom, sentence_txt):
    os.system('clear')
    for n in range(0, len(sentence_set)):
       if sentence_set[n]:
-         record(str(n)+':'+'\t'+sentence_set[n], 'data/'+str(n)+'_'+nom+'.wav' )
-         outxt = open('data/'+str(n)+'_'+nom+'.lab', 'w')
+         nom = underlining_name(sentence_set[n])
+         record(str(n)+':'+'\t'+sentence_set[n], 'data/'+nom+'.wav' )
+         outxt = open('data/'+nom+'.lab', 'w')
          outxt.write(sentence_set[n])
          outxt.close()
 
    print(f'\n{CB_GRN}** Fi de la gravació **{C_NONE}\n')
 
 # inici
-main('mostra', text_de_lectura)
+main(text_de_lectura)
